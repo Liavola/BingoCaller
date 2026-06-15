@@ -1,5 +1,151 @@
-<html>
-  <body>
-    
-  </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Bingo Caller</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #1e3a8a;
+    color: white;
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+  }
+  h1 { font-size: 2.5em; }
+  .current-number {
+    font-size: 8em;
+    font-weight: bold;
+    background: white;
+    color: #1e3a8a;
+    border-radius: 50%;
+    width: 250px;
+    height: 250px;
+    line-height: 250px;
+    margin: 20px auto;
+    box-shadow: 0 0 30px rgba(0,0,0,0.5);
+  }
+  .controls button {
+    font-size: 1.2em;
+    padding: 12px 24px;
+    margin: 5px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background: #fbbf24;
+    color: #1e3a8a;
+    font-weight: bold;
+  }
+  .controls button:hover { background: #f59e0b; }
+  .history {
+    display: grid;
+    grid-template-columns: repeat(15, 1fr);
+    gap: 5px;
+    max-width: 900px;
+    margin: 20px auto;
+  }
+  .history div {
+    padding: 10px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 5px;
+  }
+  .history div.called {
+    background: #fbbf24;
+    color: #1e3a8a;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+  <h1>🎱 Bingo Caller</h1>
+  <div class="current-number" id="current">-</div>
+  <div class="controls">
+    <button onclick="callNumber()">Call Next</button>
+    <button onclick="toggleAuto()" id="autoBtn">Auto: OFF</button>
+    <button onclick="resetGame()">Reset</button>
+  </div>
+  <p>Called: <span id="count">0</span> / 75</p>
+  <div class="history" id="history"></div>
+
+<script>
+  const MAX = 75;
+  let available = [];
+  let called = [];
+  let autoInterval = null;
+
+  function init() {
+    available = Array.from({length: MAX}, (_, i) => i + 1);
+    called = [];
+    renderHistory();
+  }
+
+  function getLetter(num) {
+    if (num <= 15) return 'B';
+    if (num <= 30) return 'I';
+    if (num <= 45) return 'N';
+    if (num <= 60) return 'G';
+    return 'O';
+  }
+
+  function callNumber() {
+    if (available.length === 0) {
+      alert('All numbers called!');
+      stopAuto();
+      return;
+    }
+    const idx = Math.floor(Math.random() * available.length);
+    const num = available.splice(idx, 1)[0];
+    called.push(num);
+    const letter = getLetter(num);
+    document.getElementById('current').textContent = `${letter}-${num}`;
+    document.getElementById('count').textContent = called.length;
+    speak(`${letter}, ${num}`);
+    renderHistory();
+  }
+
+  function speak(text) {
+    if ('speechSynthesis' in window) {
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.rate = 0.9;
+      speechSynthesis.speak(utter);
+    }
+  }
+
+  function renderHistory() {
+    const container = document.getElementById('history');
+    container.innerHTML = '';
+    for (let i = 1; i <= MAX; i++) {
+      const div = document.createElement('div');
+      div.textContent = i;
+      if (called.includes(i)) div.classList.add('called');
+      container.appendChild(div);
+    }
+  }
+
+  function toggleAuto() {
+    const btn = document.getElementById('autoBtn');
+    if (autoInterval) {
+      stopAuto();
+    } else {
+      autoInterval = setInterval(callNumber, 5000);
+      btn.textContent = 'Auto: ON';
+    }
+  }
+
+  function stopAuto() {
+    clearInterval(autoInterval);
+    autoInterval = null;
+    document.getElementById('autoBtn').textContent = 'Auto: OFF';
+  }
+
+  function resetGame() {
+    stopAuto();
+    document.getElementById('current').textContent = '-';
+    document.getElementById('count').textContent = '0';
+    init();
+  }
+
+  init();
+</script>
+</body>
 </html>
