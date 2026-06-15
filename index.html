@@ -1,151 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Bingo Caller</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background: #1e3a8a;
-    color: white;
-    text-align: center;
-    margin: 0;
-    padding: 20px;
-  }
-  h1 { font-size: 2.5em; }
-  .current-number {
-    font-size: 8em;
-    font-weight: bold;
-    background: white;
-    color: #1e3a8a;
-    border-radius: 50%;
-    width: 250px;
-    height: 250px;
-    line-height: 250px;
-    margin: 20px auto;
-    box-shadow: 0 0 30px rgba(0,0,0,0.5);
-  }
-  .controls button {
-    font-size: 1.2em;
-    padding: 12px 24px;
-    margin: 5px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    background: #fbbf24;
-    color: #1e3a8a;
-    font-weight: bold;
-  }
-  .controls button:hover { background: #f59e0b; }
-  .history {
-    display: grid;
-    grid-template-columns: repeat(15, 1fr);
-    gap: 5px;
-    max-width: 900px;
-    margin: 20px auto;
-  }
-  .history div {
-    padding: 10px;
-    background: rgba(255,255,255,0.1);
-    border-radius: 5px;
-  }
-  .history div.called {
-    background: #fbbf24;
-    color: #1e3a8a;
-    font-weight: bold;
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bingo Caller</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/animations.css">
 </head>
 <body>
-  <h1>🎱 Bingo Caller</h1>
-  <div class="current-number" id="current">-</div>
-  <div class="controls">
-    <button onclick="callNumber()">Call Next</button>
-    <button onclick="toggleAuto()" id="autoBtn">Auto: OFF</button>
-    <button onclick="resetGame()">Reset</button>
-  </div>
-  <p>Called: <span id="count">0</span> / 75</p>
-  <div class="history" id="history"></div>
+  <main class="container">
+    <header class="header">
+      <h1 class="title">Bingo Caller</h1>
+      <p class="subtitle">75-Ball US Edition</p>
+    </header>
 
-<script>
-  const MAX = 75;
-  let available = [];
-  let called = [];
-  let autoInterval = null;
+    <section class="display">
+      <div class="current-ball" id="currentBall">
+        <span class="ball-letter" id="ballLetter"></span>
+        <span class="ball-number" id="ballNumber">–</span>
+      </div>
+      <div class="previous-calls" id="previousCalls"></div>
+    </section>
 
-  function init() {
-    available = Array.from({length: MAX}, (_, i) => i + 1);
-    called = [];
-    renderHistory();
-  }
+    <section class="controls">
+      <button class="btn btn-primary" id="callBtn">Call Next</button>
+      <button class="btn btn-secondary" id="autoBtn">Start Auto</button>
+      <button class="btn btn-tertiary" id="resetBtn">Reset</button>
+    </section>
 
-  function getLetter(num) {
-    if (num <= 15) return 'B';
-    if (num <= 30) return 'I';
-    if (num <= 45) return 'N';
-    if (num <= 60) return 'G';
-    return 'O';
-  }
+    <section class="settings">
+      <label for="intervalSlider" class="slider-label">
+        Auto Interval: <span id="intervalValue">3.0</span>s
+      </label>
+      <input
+        type="range"
+        id="intervalSlider"
+        min="1"
+        max="15"
+        step="0.5"
+        value="3"
+        class="slider"
+      >
+      <label class="checkbox-label">
+        <input type="checkbox" id="voiceToggle" checked>
+        <span>Voice announcements</span>
+      </label>
+    </section>
 
-  function callNumber() {
-    if (available.length === 0) {
-      alert('All numbers called!');
-      stopAuto();
-      return;
-    }
-    const idx = Math.floor(Math.random() * available.length);
-    const num = available.splice(idx, 1)[0];
-    called.push(num);
-    const letter = getLetter(num);
-    document.getElementById('current').textContent = `${letter}-${num}`;
-    document.getElementById('count').textContent = called.length;
-    speak(`${letter}, ${num}`);
-    renderHistory();
-  }
+    <section class="board">
+      <div class="board-column" data-letter="B"></div>
+      <div class="board-column" data-letter="I"></div>
+      <div class="board-column" data-letter="N"></div>
+      <div class="board-column" data-letter="G"></div>
+      <div class="board-column" data-letter="O"></div>
+    </section>
 
-  function speak(text) {
-    if ('speechSynthesis' in window) {
-      const utter = new SpeechSynthesisUtterance(text);
-      utter.rate = 0.9;
-      speechSynthesis.speak(utter);
-    }
-  }
+    <footer class="stats">
+      <span>Called: <strong id="calledCount">0</strong> / 75</span>
+      <span>Remaining: <strong id="remainingCount">75</strong></span>
+    </footer>
+  </main>
 
-  function renderHistory() {
-    const container = document.getElementById('history');
-    container.innerHTML = '';
-    for (let i = 1; i <= MAX; i++) {
-      const div = document.createElement('div');
-      div.textContent = i;
-      if (called.includes(i)) div.classList.add('called');
-      container.appendChild(div);
-    }
-  }
-
-  function toggleAuto() {
-    const btn = document.getElementById('autoBtn');
-    if (autoInterval) {
-      stopAuto();
-    } else {
-      autoInterval = setInterval(callNumber, 5000);
-      btn.textContent = 'Auto: ON';
-    }
-  }
-
-  function stopAuto() {
-    clearInterval(autoInterval);
-    autoInterval = null;
-    document.getElementById('autoBtn').textContent = 'Auto: OFF';
-  }
-
-  function resetGame() {
-    stopAuto();
-    document.getElementById('current').textContent = '-';
-    document.getElementById('count').textContent = '0';
-    init();
-  }
-
-  init();
-</script>
+  <script src="js/config.js"></script>
+  <script src="js/speech.js"></script>
+  <script src="js/bingo.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>

@@ -1,0 +1,95 @@
+const App = (() => {
+  let autoTimer = null;
+  let autoRunning = false;
+  let intervalSeconds = CONFIG.DEFAULT_INTERVAL;
+
+  function init() {
+    UI.init();
+    Speech.init();
+    Bingo.init();
+
+    bindEvents();
+    UI.updateStats();
+  }
+
+  function bindEvents() {
+    UI.els.callBtn.addEventListener('click', callNext);
+    UI.els.autoBtn.addEventListener('click', toggleAuto);
+    UI.els.resetBtn.addEventListener('click', reset);
+
+    UI.els.intervalSlider.addEventListener('input', (e) => {
+      intervalSeconds = parseFloat(e.target.value);
+      UI.els.intervalValue.textContent = intervalSeconds.toFixed(1);
+      if (autoRunning) {
+        stopAuto();
+        startAuto();
+      }
+    });
+
+    UI.els.voiceToggle.addEventListener('change', (e) => {
+      Speech.setEnabled(e.target.checked);
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.code === 'Space' && e.target.tagName !== 'INPUT') {
+        e.preventDefault();
+        callNext();
+      } else if (e.code === 'KeyA' && e.target.tagName !== 'INPUT') {
+        toggleAuto();
+      } else if (e.code === 'KeyR' && e.target.tagName !== 'INPUT') {
+        reset();
+      }
+    });
+  }
+
+  function callNext() {
+    if (Bingo.isFinished()) {
+      stopAuto();
+      UI.setCallButtonEnabled(false);
+      Speech.speak('All numbers have been called. Bingo!');
+      return;
+    }
+    UI.updatePreviousCalls();
+    const ball = Bingo.callNext();
+    if (ball) {
+      UI.displayBall(ball);
+      UI.updateStats();
+      Speech.announceBall(ball.letter, ball.number);
+    }
+    if (Bingo.isFinished()) {
+      stopAuto();
+      UI.setCallButtonEnabled(false);
+    }
+  }
+
+  function startAuto() {
+    if (autoRunning || Bingo.isFinished()) return;
+    autoRunning = true;
+    UI.setAutoButtonText(true);
+    callNext();
+    autoTimer = setInterval(callNext, intervalSeconds * 1000);
+  }
+
+  function stopAuto() {
+    if (autoTimer) clearInterval(autoTimer);
+    autoTimer = null;
+    autoRunning = false;
+    UI.setAutoButtonText(false);
+  }
+
+  function toggleAuto() {
+    if (autoRunning) stopAuto();
+    else startAuto();
+  }
+
+  function reset() {
+    stopAuto();
+    Bingo.reset();
+    UI.resetDisplay();
+    UI.setCallButtonEnabled(true);
+  }
+
+  document.addEventListener('DOMContentLoaded', init);
+
+  return { init };
+})();

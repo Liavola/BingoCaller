@@ -1,0 +1,27 @@
+@keyframes pop {
+  0% { transform: scale(0.5); opacity: 0; }
+  60% { transform: scale(1.15); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 10px 40px rgba(251, 191, 36, 0.3); }
+  50% { box-shadow: 0 10px 60px rgba(251, 191, 36, 0.7); }
+}
+
+.current-ball.animate {
+  animation: pop 0.5s ease-out;
+}
+
+.current-ball.pulsing {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes flash {
+  0%, 100% { background: var(--accent); }
+  50% { background: #fff; }
+}
+
+.board-cell.just-called {
+  animation: flash 0.6s ease-in-out;
+}
