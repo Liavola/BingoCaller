@@ -35,16 +35,22 @@ const UI = (() => {
   function displayBall(ball) {
     els.ballLetter.textContent = ball.letter;
     els.ballNumber.textContent = ball.number;
+
+    // Remove any previous letter color classes 
+    els.currentBall.classList.remove('letter-B', 'letter-I', 'letter-N', 'letter-G', 'letter-O');
+    // Add the new one based on the called letter
+    els.currentBall.classList.add(`letter-${ball.letter}`);
+
     els.currentBall.classList.remove('animate');
     void els.currentBall.offsetWidth;
     els.currentBall.classList.add('animate');
 
     const cell = document.querySelector(`.board-cell[data-number="${ball.number}"]`);
     if (cell) {
-      cell.classList.add('called', 'just-called');
-      setTimeout(() => cell.classList.remove('just-called'), 600);
+        cell.classList.add('called', 'just-called');
+        setTimeout(() => cell.classList.remove('just-called'), 600);
+     }
     }
-  }
 
   function updatePreviousCalls() {
     const called = Bingo.getCalled();
@@ -63,13 +69,14 @@ const UI = (() => {
     els.remainingCount.textContent = Bingo.getRemaining();
   }
 
-  function resetDisplay() {
-    els.ballLetter.textContent = '';
-    els.ballNumber.textContent = '–';
-    els.previousCalls.innerHTML = '';
-    document.querySelectorAll('.board-cell').forEach(c => c.classList.remove('called', 'just-called'));
-    updateStats();
-  }
+ function resetDisplay() {
+  els.ballLetter.textContent = '';
+  els.ballNumber.textContent = '–';
+  els.previousCalls.innerHTML = '';
+  els.currentBall.classList.remove('letter-B', 'letter-I', 'letter-N', 'letter-G', 'letter-O');
+  document.querySelectorAll('.board-cell').forEach(c => c.classList.remove('called', 'just-called'));
+  updateStats();
+}
 
   function setAutoButtonText(running) {
     els.autoBtn.textContent = running ? 'Stop Automatisch' : 'Start Automatisch';
