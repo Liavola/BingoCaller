@@ -25,3 +25,32 @@
 .board-cell.just-called {
   animation: flash 0.6s ease-in-out;
 }
+
+@keyframes rollIn {
+  0% {
+    transform: translateX(-80px) rotate(-360deg) scale(0.3);
+    opacity: 0;
+  }
+  60% {
+    transform: translateX(8px) rotate(20deg) scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(0) rotate(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes shiftRight {
+  0% { transform: translateX(-58px); }
+  100% { transform: translateX(0); }
+}
+
+.previous-ball.rolling-in {
+  animation: rollIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.previous-ball.shifting {
+  animation: shiftRight 0.4s ease-out;
+}
+

@@ -109,6 +109,7 @@ body {
   flex-wrap: wrap;
   justify-content: center;
   min-height: 50px;
+  overflow: hidden;
 }
 
 .previous-ball {

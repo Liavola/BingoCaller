@@ -55,11 +55,29 @@ const UI = (() => {
 function updatePreviousCalls() {
   const called = Bingo.getCalled();
   const previous = called.slice(0, -1).slice(-CONFIG.PREVIOUS_CALLS_LIMIT).reverse();
+
+  // Get the currently displayed ball numbers
+  const existingNumbers = Array.from(els.previousCalls.children).map(
+    el => parseInt(el.dataset.number)
+  );
+  const newFirst = previous[0];
+  const isNewBall = newFirst && !existingNumbers.includes(newFirst.number);
+
   els.previousCalls.innerHTML = '';
-  previous.forEach(ball => {
+  previous.forEach((ball, index) => {
     const div = document.createElement('div');
     div.className = `previous-ball letter-${ball.letter}`;
+    div.dataset.number = ball.number;
     div.textContent = `${ball.letter}${ball.number}`;
+
+    if (isNewBall) {
+      if (index === 0) {
+        div.classList.add('rolling-in');
+      } else {
+        div.classList.add('shifting');
+      }
+    }
+
     els.previousCalls.appendChild(div);
   });
 }
