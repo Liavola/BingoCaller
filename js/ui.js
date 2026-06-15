@@ -52,17 +52,17 @@ const UI = (() => {
      }
     }
 
-  function updatePreviousCalls() {
-    const called = Bingo.getCalled();
-    const previous = called.slice(0, -1).slice(-CONFIG.PREVIOUS_CALLS_LIMIT).reverse();
-    els.previousCalls.innerHTML = '';
-    previous.forEach(ball => {
-      const div = document.createElement('div');
-      div.className = 'previous-ball';
-      div.textContent = `${ball.letter}${ball.number}`;
-      els.previousCalls.appendChild(div);
-    });
-  }
+function updatePreviousCalls() {
+  const called = Bingo.getCalled();
+  const previous = called.slice(0, -1).slice(-CONFIG.PREVIOUS_CALLS_LIMIT).reverse();
+  els.previousCalls.innerHTML = '';
+  previous.forEach(ball => {
+    const div = document.createElement('div');
+    div.className = `previous-ball letter-${ball.letter}`;
+    div.textContent = `${ball.letter}${ball.number}`;
+    els.previousCalls.appendChild(div);
+  });
+}
 
   function updateStats() {
     els.calledCount.textContent = Bingo.getCalledCount();

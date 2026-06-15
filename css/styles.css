@@ -121,6 +121,24 @@ body {
   justify-content: center;
   font-weight: 700;
   font-size: 0.9rem;
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.previous-ball.letter-B {
+  background: radial-gradient(circle at 30% 30%, #fca5a5, #dc2626);
+}
+.previous-ball.letter-I {
+  background: radial-gradient(circle at 30% 30%, #fcd34d, #d97706);
+}
+.previous-ball.letter-N {
+  background: radial-gradient(circle at 30% 30%, #6ee7b7, #059669);
+}
+.previous-ball.letter-G {
+  background: radial-gradient(circle at 30% 30%, #93c5fd, #2563eb);
+}
+.previous-ball.letter-O {
+  background: radial-gradient(circle at 30% 30%, #d8b4fe, #9333ea);
 }
 
 /* Controls */
