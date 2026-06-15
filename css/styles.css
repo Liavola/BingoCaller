@@ -247,7 +247,6 @@ body {
 .board-cell.called {
   background: var(--accent);
   color: #1f2937;
-  transform: scale(1.05);
 }
 
 /* Stats */
