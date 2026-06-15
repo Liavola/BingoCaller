@@ -20,15 +20,6 @@ const CONFIG = {
   }
 };
 
-// Dutch letter pronunciation (phonetic) so speech engines say it correctly
-const LETTER_PRONUNCIATION = {
-  B: 'Bee',
-  I: 'Ie',
-  N: 'En',
-  G: 'Gee',
-  O: 'Oo'
-};
-
 function getLetterForNumber(num) {
   for (const letter of CONFIG.LETTERS) {
     const [min, max] = CONFIG.RANGES[letter];

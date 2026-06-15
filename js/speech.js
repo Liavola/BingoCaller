@@ -1,50 +1,86 @@
-const Speech = (() => {
-  let voice = null;
-  let enabled = true;
+const UI = (() => {
+  const els = {};
 
   function init() {
-    if (!('speechSynthesis' in window)) {
-      console.warn('Speech synthesis niet ondersteund');
-      return;
+    els.ballLetter = document.getElementById('ballLetter');
+    els.ballNumber = document.getElementById('ballNumber');
+    els.currentBall = document.getElementById('currentBall');
+    els.previousCalls = document.getElementById('previousCalls');
+    els.calledCount = document.getElementById('calledCount');
+    els.remainingCount = document.getElementById('remainingCount');
+    els.callBtn = document.getElementById('callBtn');
+    els.autoBtn = document.getElementById('autoBtn');
+    els.resetBtn = document.getElementById('resetBtn');
+    els.intervalSlider = document.getElementById('intervalSlider');
+    els.intervalValue = document.getElementById('intervalValue');
+    els.voiceToggle = document.getElementById('voiceToggle');
+
+    buildBoard();
+  }
+
+  function buildBoard() {
+    document.querySelectorAll('.board-column').forEach(col => {
+      const letter = col.dataset.letter;
+      const [min, max] = CONFIG.RANGES[letter];
+      for (let n = min; n <= max; n++) {
+        const cell = document.createElement('div');
+        cell.className = 'board-cell';
+        cell.dataset.number = n;
+        cell.textContent = n;
+        col.appendChild(cell);
+      }
+    });
+  }
+
+  function displayBall(ball) {
+    els.ballLetter.textContent = ball.letter;
+    els.ballNumber.textContent = ball.number;
+    els.currentBall.classList.remove('animate');
+    void els.currentBall.offsetWidth;
+    els.currentBall.classList.add('animate');
+
+    const cell = document.querySelector(`.board-cell[data-number="${ball.number}"]`);
+    if (cell) {
+      cell.classList.add('called', 'just-called');
+      setTimeout(() => cell.classList.remove('just-called'), 600);
     }
-    loadVoice();
-    if (speechSynthesis.onvoiceschanged !== undefined) {
-      speechSynthesis.onvoiceschanged = loadVoice;
-    }
   }
 
-  function loadVoice() {
-    const voices = speechSynthesis.getVoices();
-    // Prefer Dutch voices
-    voice = voices.find(v => v.lang === 'nl-NL' && v.name.toLowerCase().includes('google'))
-         || voices.find(v => v.lang === 'nl-NL')
-         || voices.find(v => v.lang.startsWith('nl'))
-         || voices[0];
-    if (voice) console.log('Stem geselecteerd:', voice.name, voice.lang);
+  function updatePreviousCalls() {
+    const called = Bingo.getCalled();
+    const previous = called.slice(0, -1).slice(-CONFIG.PREVIOUS_CALLS_LIMIT).reverse();
+    els.previousCalls.innerHTML = '';
+    previous.forEach(ball => {
+      const div = document.createElement('div');
+      div.className = 'previous-ball';
+      div.textContent = `${ball.letter}${ball.number}`;
+      els.previousCalls.appendChild(div);
+    });
   }
 
-  function speak(text) {
-    if (!enabled || !('speechSynthesis' in window)) return;
-    speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    if (voice) utterance.voice = voice;
-    utterance.lang = 'nl-NL';
-    utterance.rate = CONFIG.SPEECH.RATE;
-    utterance.pitch = CONFIG.SPEECH.PITCH;
-    utterance.volume = CONFIG.SPEECH.VOLUME;
-    speechSynthesis.speak(utterance);
+  function updateStats() {
+    els.calledCount.textContent = Bingo.getCalledCount();
+    els.remainingCount.textContent = Bingo.getRemaining();
   }
 
-  function announceBall(letter, number) {
-    // Single, clean announcement: "B 7" — no rapid repetition
-    const pronunciation = LETTER_PRONUNCIATION[letter] || letter;
-    speak(`${pronunciation} ${number}`);
+  function resetDisplay() {
+    els.ballLetter.textContent = '';
+    els.ballNumber.textContent = '–';
+    els.previousCalls.innerHTML = '';
+    document.querySelectorAll('.board-cell').forEach(c => c.classList.remove('called', 'just-called'));
+    updateStats();
   }
 
-  function setEnabled(value) {
-    enabled = value;
-    if (!enabled) speechSynthesis.cancel();
+  function setAutoButtonText(running) {
+    els.autoBtn.textContent = running ? 'Stop Automatisch' : 'Start Automatisch';
   }
 
-  return { init, speak, announceBall, setEnabled };
+  function setCallButtonEnabled(enabled) {
+    els.callBtn.disabled = !enabled;
+  }
+
+  return {
+    init, els, displayBall, updatePreviousCalls, updateStats,
+    resetDisplay, setAutoButtonText, setCallButtonEnabled
+  };
 })();
