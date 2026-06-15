@@ -31,12 +31,13 @@ const App = (() => {
     });
 
     document.addEventListener('keydown', (e) => {
-      if (e.code === 'Space' && e.target.tagName !== 'INPUT') {
+      if (e.target.tagName === 'INPUT') return;
+      if (e.code === 'Space') {
         e.preventDefault();
         callNext();
-      } else if (e.code === 'KeyA' && e.target.tagName !== 'INPUT') {
+      } else if (e.code === 'KeyA') {
         toggleAuto();
-      } else if (e.code === 'KeyR' && e.target.tagName !== 'INPUT') {
+      } else if (e.code === 'KeyR') {
         reset();
       }
     });
@@ -46,7 +47,7 @@ const App = (() => {
     if (Bingo.isFinished()) {
       stopAuto();
       UI.setCallButtonEnabled(false);
-      Speech.speak('All numbers have been called. Bingo!');
+      Speech.speak('Alle nummers zijn gevallen. Bingo!');
       return;
     }
     UI.updatePreviousCalls();

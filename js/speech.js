@@ -4,7 +4,7 @@ const Speech = (() => {
 
   function init() {
     if (!('speechSynthesis' in window)) {
-      console.warn('Speech synthesis not supported');
+      console.warn('Speech synthesis niet ondersteund');
       return;
     }
     loadVoice();
@@ -15,10 +15,12 @@ const Speech = (() => {
 
   function loadVoice() {
     const voices = speechSynthesis.getVoices();
-    voice = voices.find(v => v.lang === CONFIG.SPEECH.PREFERRED_LANG && v.name.includes('Google'))
-         || voices.find(v => v.lang === CONFIG.SPEECH.PREFERRED_LANG)
-         || voices.find(v => v.lang.startsWith('en'))
+    // Prefer Dutch voices
+    voice = voices.find(v => v.lang === 'nl-NL' && v.name.toLowerCase().includes('google'))
+         || voices.find(v => v.lang === 'nl-NL')
+         || voices.find(v => v.lang.startsWith('nl'))
          || voices[0];
+    if (voice) console.log('Stem geselecteerd:', voice.name, voice.lang);
   }
 
   function speak(text) {
@@ -26,6 +28,7 @@ const Speech = (() => {
     speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
     if (voice) utterance.voice = voice;
+    utterance.lang = 'nl-NL';
     utterance.rate = CONFIG.SPEECH.RATE;
     utterance.pitch = CONFIG.SPEECH.PITCH;
     utterance.volume = CONFIG.SPEECH.VOLUME;
@@ -33,7 +36,9 @@ const Speech = (() => {
   }
 
   function announceBall(letter, number) {
-    speak(`${letter}. ${number}. ${letter} ${number}.`);
+    // Single, clean announcement: "B 7" — no rapid repetition
+    const pronunciation = LETTER_PRONUNCIATION[letter] || letter;
+    speak(`${pronunciation} ${number}`);
   }
 
   function setEnabled(value) {

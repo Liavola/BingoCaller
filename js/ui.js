@@ -72,7 +72,7 @@ const UI = (() => {
   }
 
   function setAutoButtonText(running) {
-    els.autoBtn.textContent = running ? 'Stop Auto' : 'Start Auto';
+    els.autoBtn.textContent = running ? 'Stop Automatisch' : 'Start Automatisch';
   }
 
   function setCallButtonEnabled(enabled) {

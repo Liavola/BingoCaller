@@ -16,8 +16,17 @@ const CONFIG = {
     RATE: 0.95,
     PITCH: 1.0,
     VOLUME: 1.0,
-    PREFERRED_LANG: 'en-US'
+    PREFERRED_LANG: 'nl-NL'
   }
+};
+
+// Dutch letter pronunciation (phonetic) so speech engines say it correctly
+const LETTER_PRONUNCIATION = {
+  B: 'Bee',
+  I: 'Ie',
+  N: 'En',
+  G: 'Gee',
+  O: 'Oo'
 };
 
 function getLetterForNumber(num) {
