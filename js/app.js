@@ -50,10 +50,10 @@ const App = (() => {
       Speech.speak('Alle nummers zijn gevallen. Bingo!');
       return;
     }
-    UI.updatePreviousCalls();
     const ball = Bingo.callNext();
     if (ball) {
       UI.displayBall(ball);
+      UI.updatePreviousCalls();
       UI.updateStats();
       Speech.announceBall(ball.letter, ball.number);
     }
