@@ -89,8 +89,8 @@ body {
   top: -100px;
   position: relative;
   transform-style: preserve-3d;
-  backface-visibility: hidden;
   animation: rotate 10s linear infinite;
+  will-change: transform;
 }
 
 @keyframes rotate {
@@ -130,7 +130,7 @@ body {
   backface-visibility: hidden;
   user-select: none;
   pointer-events: none;
-  transform-origin: center center;      /* nieuw */
+  will-change: transform;
 }
 
 /* Posities van de 4 kanten */
