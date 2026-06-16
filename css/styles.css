@@ -71,26 +71,11 @@ body {
 }
 
 /* Color variants based on BINGO letter */
-.current-ball.letter-B {
-  background: radial-gradient(circle at 30% 30%, #fca5a5, #dc2626);
-  box-shadow: 0 10px 40px rgba(239, 68, 68, 0.5);
-}
-.current-ball.letter-I {
-  background: radial-gradient(circle at 30% 30%, #fcd34d, #d97706);
-  box-shadow: 0 10px 40px rgba(245, 158, 11, 0.5);
-}
-.current-ball.letter-N {
-  background: radial-gradient(circle at 30% 30%, #6ee7b7, #059669);
-  box-shadow: 0 10px 40px rgba(16, 185, 129, 0.5);
-}
-.current-ball.letter-G {
-  background: radial-gradient(circle at 30% 30%, #93c5fd, #2563eb);
-  box-shadow: 0 10px 40px rgba(59, 130, 246, 0.5);
-}
-.current-ball.letter-O {
-  background: radial-gradient(circle at 30% 30%, #d8b4fe, #9333ea);
-  box-shadow: 0 10px 40px rgba(168, 85, 247, 0.5);
-}
+current-ball.letter-B .face { background: #dc2626; }
+.current-ball.letter-I .face { background: #d97706; }
+.current-ball.letter-N .face { background: #059669; }
+.current-ball.letter-G .face { background: #2563eb; }
+.current-ball.letter-O .face { background: #9333ea; }
 
 .ball-letter {
   font-size: 2rem;
@@ -292,13 +277,13 @@ body {
 
 /* ── 3D Ball Container ── */
 .current-ball {
-  position: relative;       /* override to allow absolute children */
+  position: relative;
   width: 200px;
   height: 200px;
-  border-radius: 50%;
-  overflow: hidden;
-  background: none;         /* let the 3D ball provide its own look */
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  /* Geen border-radius of background meer nodig */
+  background: none;
+  box-shadow: none;
+  display: block; /* niet meer flex */
 }
 
 /* Remove radial-gradient backgrounds — 
@@ -387,23 +372,109 @@ body {
 .current-ball.letter-N::before { background: #059669; }
 .current-ball.letter-G::before { background: #2563eb; }
 .current-ball.letter-O::before { background: #9333ea; }
+.current-ball .face { background: #475569; }
 
-/* Z-index layering */
-.ball-3d      { z-index: 1; }
-.clip-3d      { z-index: 2; }
 
-/* ── Text on top ── */
-.ball-text-overlay {
+
+.cube-wrapper {
+  width: 0;
+  height: 0;
+  top: 100px;
+  left: 100px;
   position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-  pointer-events: none;
+  perspective-origin: 0 0;
+  perspective: 80px;
+}
 
-  /* Subtle text shadow so it reads over the spinning lines */
-  text-shadow: 0 2px 8px rgba(0,0,0,0.7);
+.cube-2 {
+  transform: translateZ(-100px) scaleX(1.8);
+  transform-style: preserve-3d;
+}
+
+.cube {
+  top: -100px;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: rotate 10s linear infinite;
+}
+
+@keyframes rotate {
+  0%   { transform: rotate3d(0, 1, 0, 0deg); }
+  100% { transform: rotate3d(0, 1, 0, 360deg); }
+}
+
+.face {
+  position: absolute;
+  width: 84px;
+  height: 200px;
+  background: #475569; /* standaard grijs */
+  transition: background 0.4s ease;
+}
+
+.ball-number {
+  position: absolute;
+  width: 84px;
+  height: 200px;
+  display: flex;
+  flex-direction: column;  /* letter boven, nummer onder */
+  justify-content: center;
+  align-items: center;
+  font-family: 'Arial Black', sans-serif;
   color: white;
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+  backface-visibility: hidden;
+  user-select: none;
+  pointer-events: none;
+}
+
+.ball-letter {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.ball-num {
+  font-size: 46px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+/* Posities van de 4 kanten */
+.num1 { transform: translateX(-41.4px) translateZ(102px); }
+.num2 { transform: translateX(-41.4px) rotateY(90deg)  translateZ(102px); }
+.num3 { transform: translateX(-41.4px) rotateY(180deg) translateZ(102px); }
+.num4 { transform: translateX(-41.4px) rotateY(270deg) translateZ(102px); }
+
+/* Face posities */
+#face1 { transform: translateX(-41.4px) translateZ(100px); }
+#face2 { transform: translateX(29.2px)  translateZ(70.8px)  rotateY(45deg); }
+#face3 { transform: translateX(58.5px)  rotateY(90deg); }
+#face4 { transform: translateX(29.2px)  translateZ(-70.8px) rotateY(135deg); }
+#face5 { transform: translateX(-41.4px) translateZ(-100px)  rotateY(180deg); }
+#face6 { transform: translateX(-111.4px) translateZ(-70.8px) rotateY(225deg); }
+#face7 { transform: translateX(-141.4px) rotateY(270deg); }
+#face8 { transform: translateX(-111.4px) translateZ(70px)   rotateY(315deg); }
+
+.circle {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+}
+
+.clip-circle {
+  position: absolute;
+  top: -16px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  clip-path: circle(99px at center);
+}
+
+.lighting {
+  box-shadow:
+    -20px -30px 55px 0 rgba(0,0,0,0.7) inset,
+    -75px -100px 150px 0 rgba(0,0,0,0.4) inset,
+    75px 100px 200px 0 rgba(255,255,255,0.3) inset;
+  pointer-events: none;
 }

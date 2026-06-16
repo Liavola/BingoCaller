@@ -15,21 +15,45 @@
     </header>
 
     <section class="display">
-    <div class="current-ball" id="currentBall">
-  <!-- 3D ball layers -->
-  <div class="ball-3d">
-    <div class="ball-layer moving-3d">
-    </div>
-    <div class="ball-layer clip-3d">
-      <div class="shade-3d"></div>
-    </div>
-  </div>
+   <div class="current-ball" id="currentBall">
 
-  <!-- Text overlay -->
-  <div class="ball-text-overlay">
-    <span class="ball-letter" id="ballLetter"></span>
-    <span class="ball-number" id="ballNumber">–</span>
+  <!-- 3D bal -->
+  <div class="clip-circle">
+    <div class="cube-wrapper">
+      <div class="cube-2">
+        <div class="cube">
+          <div id="face1" class="face"></div>
+          <div id="face2" class="face"></div>
+          <div id="face3" class="face"></div>
+          <div id="face4" class="face"></div>
+          <div id="face5" class="face"></div>
+          <div id="face6" class="face"></div>
+          <div id="face7" class="face"></div>
+          <div id="face8" class="face"></div>
+
+          <!-- Nummer op 4 kanten zodat het altijd zichtbaar is -->
+          <div class="ball-number num1">
+            <div class="ball-letter" id="ballLetter1"></div>
+            <div class="ball-num" id="ballNumber1">–</div>
+          </div>
+          <div class="ball-number num2">
+            <div class="ball-letter" id="ballLetter2"></div>
+            <div class="ball-num" id="ballNumber2">–</div>
+          </div>
+          <div class="ball-number num3">
+            <div class="ball-letter" id="ballLetter3"></div>
+            <div class="ball-num" id="ballNumber3">–</div>
+          </div>
+          <div class="ball-number num4">
+            <div class="ball-letter" id="ballLetter4"></div>
+            <div class="ball-num" id="ballNumber4">–</div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+  <div class="circle lighting"></div>
+
 </div>
       <div class="previous-calls" id="previousCalls"></div>
     </section>

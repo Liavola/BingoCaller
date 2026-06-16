@@ -33,24 +33,28 @@ const UI = (() => {
   }
 
   function displayBall(ball) {
-    els.ballLetter.textContent = ball.letter;
-    els.ballNumber.textContent = ball.number;
+  // Update alle 4 kanten
+  [1, 2, 3, 4].forEach(i => {
+    document.getElementById(`ballLetter${i}`).textContent = ball.letter;
+    document.getElementById(`ballNumber${i}`).textContent = ball.number;
+  });
 
-    // Remove any previous letter color classes 
-    els.currentBall.classList.remove('letter-B', 'letter-I', 'letter-N', 'letter-G', 'letter-O');
-    // Add the new one based on the called letter
-    els.currentBall.classList.add(`letter-${ball.letter}`);
+  // Kleur wisselen
+  els.currentBall.classList.remove('letter-B','letter-I','letter-N','letter-G','letter-O');
+  els.currentBall.classList.add(`letter-${ball.letter}`);
 
-    els.currentBall.classList.remove('animate');
-    void els.currentBall.offsetWidth;
-    els.currentBall.classList.add('animate');
+  // Animatie reset
+  els.currentBall.classList.remove('animate');
+  void els.currentBall.offsetWidth;
+  els.currentBall.classList.add('animate');
 
-    const cell = document.querySelector(`.board-cell[data-number="${ball.number}"]`);
-    if (cell) {
-        cell.classList.add('called', 'just-called');
-        setTimeout(() => cell.classList.remove('just-called'), 600);
-     }
-    }
+  // Board cel markeren
+  const cell = document.querySelector(`.board-cell[data-number="${ball.number}"]`);
+  if (cell) {
+    cell.classList.add('called', 'just-called');
+    setTimeout(() => cell.classList.remove('just-called'), 600);
+  }
+}
 
 function updatePreviousCalls() {
   const called = Bingo.getCalled();
@@ -87,12 +91,15 @@ function updatePreviousCalls() {
     els.remainingCount.textContent = Bingo.getRemaining();
   }
 
- function resetDisplay() {
-  els.ballLetter.textContent = '';
-  els.ballNumber.textContent = '–';
+function resetDisplay() {
+  [1, 2, 3, 4].forEach(i => {
+    document.getElementById(`ballLetter${i}`).textContent = '';
+    document.getElementById(`ballNumber${i}`).textContent = '–';
+  });
   els.previousCalls.innerHTML = '';
-  els.currentBall.classList.remove('letter-B', 'letter-I', 'letter-N', 'letter-G', 'letter-O');
-  document.querySelectorAll('.board-cell').forEach(c => c.classList.remove('called', 'just-called'));
+  els.currentBall.classList.remove('letter-B','letter-I','letter-N','letter-G','letter-O');
+  document.querySelectorAll('.board-cell')
+    .forEach(c => c.classList.remove('called', 'just-called'));
   updateStats();
 }
 
