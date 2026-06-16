@@ -30,9 +30,7 @@ body {
   gap: 1.5rem;
 }
 
-.header {
-  text-align: center;
-}
+.header { text-align: center; }
 
 .title {
   font-size: 2.5rem;
@@ -40,12 +38,7 @@ body {
   letter-spacing: -0.02em;
 }
 
-.subtitle {
-  color: var(--text-dim);
-  margin-top: 0.25rem;
-}
-
-/* Display */
+/* ── Display sectie ── */
 .display {
   display: flex;
   flex-direction: column;
@@ -56,38 +49,150 @@ body {
   border-radius: 1rem;
 }
 
+/* ── 3D Bal ── */
 .current-ball {
+  position: relative;
   width: 200px;
   height: 200px;
+  background: none;
+  box-shadow: none;
+  display: block;
+}
+
+/* Gekleurde basis achter de 3D bal */
+.current-ball::before {
+  content: '';
+  position: absolute;
+  inset: 0;
   border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, #94a3b8, #475569);
+  background: #475569;
+  z-index: 0;
+  transition: background 0.4s ease;
+}
+
+.current-ball.letter-B::before { background: #dc2626; }
+.current-ball.letter-I::before { background: #d97706; }
+.current-ball.letter-N::before { background: #059669; }
+.current-ball.letter-G::before { background: #2563eb; }
+.current-ball.letter-O::before { background: #9333ea; }
+
+/* Face kleuren via letter klasse */
+.current-ball .face            { background: #475569; }
+.current-ball.letter-B .face  { background: #dc2626; }
+.current-ball.letter-I .face  { background: #d97706; }
+.current-ball.letter-N .face  { background: #059669; }
+.current-ball.letter-G .face  { background: #2563eb; }
+.current-ball.letter-O .face  { background: #9333ea; }
+
+/* ── 3D kubus ── */
+.cube-wrapper {
+  width: 0;
+  height: 0;
+  top: 100px;
+  left: 100px;
+  position: absolute;
+  perspective-origin: 0 0;
+  perspective: 80px;
+  z-index: 1;
+}
+
+.cube-2 {
+  transform: translateZ(-100px) scaleX(1.8);
+  transform-style: preserve-3d;
+}
+
+.cube {
+  top: -100px;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: rotate 10s linear infinite;
+}
+
+@keyframes rotate {
+  0%   { transform: rotate3d(0, 1, 0, 0deg); }
+  100% { transform: rotate3d(0, 1, 0, 360deg); }
+}
+
+.face {
+  position: absolute;
+  width: 84px;
+  height: 200px;
+  transition: background 0.4s ease;
+}
+
+/* Face posities */
+#face1 { transform: translateX(-41.4px) translateZ(100px); }
+#face2 { transform: translateX(29.2px)  translateZ(70.8px)  rotateY(45deg); }
+#face3 { transform: translateX(58.5px)  rotateY(90deg); }
+#face4 { transform: translateX(29.2px)  translateZ(-70.8px) rotateY(135deg); }
+#face5 { transform: translateX(-41.4px) translateZ(-100px)  rotateY(180deg); }
+#face6 { transform: translateX(-111.4px) translateZ(-70.8px) rotateY(225deg); }
+#face7 { transform: translateX(-141.4px) rotateY(270deg); }
+#face8 { transform: translateX(-111.4px) translateZ(70px)   rotateY(315deg); }
+
+/* Tekst op de bal */
+.ball-number {
+  position: absolute;
+  width: 84px;
+  height: 200px;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  align-items: center;
+  font-family: 'Arial Black', sans-serif;
   color: white;
-  transition: background 0.4s ease, box-shadow 0.4s ease;
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+  backface-visibility: hidden;
+  user-select: none;
+  pointer-events: none;
 }
 
-/* Color variants based on BINGO letter */
-current-ball.letter-B .face { background: #dc2626; }
-.current-ball.letter-I .face { background: #d97706; }
-.current-ball.letter-N .face { background: #059669; }
-.current-ball.letter-G .face { background: #2563eb; }
-.current-ball.letter-O .face { background: #9333ea; }
+/* Posities van de 4 kanten */
+.num1 { transform: translateX(-41.4px) translateZ(102px); }
+.num2 { transform: translateX(-41.4px) rotateY(90deg)  translateZ(102px); }
+.num3 { transform: translateX(-41.4px) rotateY(180deg) translateZ(102px); }
+.num4 { transform: translateX(-41.4px) rotateY(270deg) translateZ(102px); }
 
 .ball-letter {
-  font-size: 2rem;
+  font-size: 22px;
   font-weight: 700;
+  line-height: 1;
 }
 
-.ball-number {
-  font-size: 4.5rem;
+.ball-num {
+  font-size: 46px;
   font-weight: 900;
   line-height: 1;
 }
 
+/* Clip en lighting */
+.clip-circle {
+  position: absolute;
+  top: -16px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  clip-path: circle(99px at center);
+  z-index: 1;
+}
+
+.circle {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+}
+
+.lighting {
+  z-index: 2;
+  box-shadow:
+    -20px -30px 55px 0 rgba(0,0,0,0.7) inset,
+    -75px -100px 150px 0 rgba(0,0,0,0.4) inset,
+    75px 100px 200px 0 rgba(255,255,255,0.3) inset;
+  pointer-events: none;
+}
+
+/* ── Previous calls ── */
 .previous-calls {
   display: flex;
   gap: 0.5rem;
@@ -108,26 +213,16 @@ current-ball.letter-B .face { background: #dc2626; }
   font-weight: 700;
   font-size: 0.9rem;
   color: white;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
 
-.previous-ball.letter-B {
-  background: radial-gradient(circle at 30% 30%, #fca5a5, #dc2626);
-}
-.previous-ball.letter-I {
-  background: radial-gradient(circle at 30% 30%, #fcd34d, #d97706);
-}
-.previous-ball.letter-N {
-  background: radial-gradient(circle at 30% 30%, #6ee7b7, #059669);
-}
-.previous-ball.letter-G {
-  background: radial-gradient(circle at 30% 30%, #93c5fd, #2563eb);
-}
-.previous-ball.letter-O {
-  background: radial-gradient(circle at 30% 30%, #d8b4fe, #9333ea);
-}
+.previous-ball.letter-B { background: radial-gradient(circle at 30% 30%, #fca5a5, #dc2626); }
+.previous-ball.letter-I { background: radial-gradient(circle at 30% 30%, #fcd34d, #d97706); }
+.previous-ball.letter-N { background: radial-gradient(circle at 30% 30%, #6ee7b7, #059669); }
+.previous-ball.letter-G { background: radial-gradient(circle at 30% 30%, #93c5fd, #2563eb); }
+.previous-ball.letter-O { background: radial-gradient(circle at 30% 30%, #d8b4fe, #9333ea); }
 
-/* Controls */
+/* ── Controls ── */
 .controls {
   display: flex;
   gap: 1rem;
@@ -145,15 +240,15 @@ current-ball.letter-B .face { background: #dc2626; }
   min-width: 140px;
 }
 
-.btn:hover { opacity: 0.9; }
-.btn:active { transform: scale(0.97); }
+.btn:hover   { opacity: 0.9; }
+.btn:active  { transform: scale(0.97); }
 .btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-.btn-primary { background: var(--primary); }
+.btn-primary   { background: var(--primary); }
 .btn-secondary { background: var(--secondary); }
-.btn-tertiary { background: var(--tertiary); }
+.btn-tertiary  { background: var(--tertiary); }
 
-/* Settings */
+/* ── Settings ── */
 .settings {
   background: var(--surface);
   padding: 1.5rem;
@@ -205,7 +300,7 @@ current-ball.letter-B .face { background: #dc2626; }
   cursor: pointer;
 }
 
-/* Board */
+/* ── Board ── */
 .board {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -253,7 +348,7 @@ current-ball.letter-B .face { background: #dc2626; }
   color: #1f2937;
 }
 
-/* Stats */
+/* ── Stats ── */
 .stats {
   display: flex;
   justify-content: space-around;
@@ -263,218 +358,12 @@ current-ball.letter-B .face { background: #dc2626; }
   font-size: 1.1rem;
 }
 
-.stats strong {
-  color: var(--accent);
-}
+.stats strong { color: var(--accent); }
 
+/* ── Responsive ── */
 @media (max-width: 600px) {
   .title { font-size: 1.75rem; }
   .current-ball { width: 150px; height: 150px; }
-  .ball-number { font-size: 3.5rem; }
   .btn { min-width: 100px; padding: 0.75rem 1rem; }
   .board-cell { font-size: 0.75rem; padding: 0.25rem; }
-}
-
-/* ── 3D Ball Container ── */
-.current-ball {
-  position: relative;
-  width: 200px;
-  height: 200px;
-  /* Geen border-radius of background meer nodig */
-  background: none;
-  box-shadow: none;
-  display: block; /* niet meer flex */
-}
-
-/* Remove radial-gradient backgrounds — 
-   the shade layer handles lighting now */
-.current-ball.letter-B,
-.current-ball.letter-I,
-.current-ball.letter-N,
-.current-ball.letter-G,
-.current-ball.letter-O {
-  background: none;
-}
-
-/* ── 3D Ball Internals ── */
-.ball-3d {
-  position: absolute;
-  top: 0; left: 0;
-  width: 200px;
-  height: 200px;
-  transform-style: preserve-3d;
-  transform: rotateX(-5deg);
-}
-
-@keyframes rot-3d {
-  0%   { transform: rotateY(0deg)   rotateX(0deg) rotateZ(0deg); }
-  100% { transform: rotateY(360deg) rotateX(0deg) rotateZ(0deg); }
-}
-
-.ball-layer {
-  position: absolute;
-  top: 0; left: 0;
-  width: 200px;
-  height: 200px;
-}
-
-.moving-3d {
-  transform-style: preserve-3d;
-  transform-origin: 100px 100px; /* half of 200px */
-  animation: rot-3d 10s linear infinite;
-}
-
-
-.clip-3d {
-  border-radius: 50%;
-  overflow: hidden;
-}
-
-/* ── Shade / lighting ── */
-@keyframes highlightanim-3d {
-  0%    { left: -150%; top: -178%; }
-  12.5% { left: -118%; top: -180%; }
-  25%   { left: -98%;  top: -196%; }
-  50%   { left: -150%; top: -248%; }
-  75%   { left: -202%; top: -196%; }
-  87.5% { left: -182%; top: -180%; }
-  100%  { left: -150%; top: -178%; }
-}
-
-.shade-3d {
-  position: relative;
-  top: -150%;
-  left: -150%;
-  width: 400%;
-  height: 400%;
-  background: radial-gradient(
-    at 50% 50%,
-    rgba(255,255,255,0.6),
-    transparent 50%,
-    rgba(0,0,0,0.5)
-  );
-  animation: highlightanim-3d 10s linear infinite;
-}
-
-/* ── Ball color tint (applied to the base) ── */
-.current-ball::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: #475569;       /* default grey */
-  z-index: 0;
-  transition: background 0.4s ease;
-}
-
-.current-ball.letter-B::before { background: #dc2626; }
-.current-ball.letter-I::before { background: #d97706; }
-.current-ball.letter-N::before { background: #059669; }
-.current-ball.letter-G::before { background: #2563eb; }
-.current-ball.letter-O::before { background: #9333ea; }
-.current-ball .face { background: #475569; }
-
-
-
-.cube-wrapper {
-  width: 0;
-  height: 0;
-  top: 100px;
-  left: 100px;
-  position: absolute;
-  perspective-origin: 0 0;
-  perspective: 80px;
-}
-
-.cube-2 {
-  transform: translateZ(-100px) scaleX(1.8);
-  transform-style: preserve-3d;
-}
-
-.cube {
-  top: -100px;
-  position: relative;
-  transform-style: preserve-3d;
-  animation: rotate 10s linear infinite;
-}
-
-@keyframes rotate {
-  0%   { transform: rotate3d(0, 1, 0, 0deg); }
-  100% { transform: rotate3d(0, 1, 0, 360deg); }
-}
-
-.face {
-  position: absolute;
-  width: 84px;
-  height: 200px;
-  background: #475569; /* standaard grijs */
-  transition: background 0.4s ease;
-}
-
-.ball-number {
-  position: absolute;
-  width: 84px;
-  height: 200px;
-  display: flex;
-  flex-direction: column;  /* letter boven, nummer onder */
-  justify-content: center;
-  align-items: center;
-  font-family: 'Arial Black', sans-serif;
-  color: white;
-  text-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
-  backface-visibility: hidden;
-  user-select: none;
-  pointer-events: none;
-}
-
-.ball-letter {
-  font-size: 22px;
-  font-weight: 700;
-  line-height: 1;
-}
-
-.ball-num {
-  font-size: 46px;
-  font-weight: 900;
-  line-height: 1;
-}
-
-/* Posities van de 4 kanten */
-.num1 { transform: translateX(-41.4px) translateZ(102px); }
-.num2 { transform: translateX(-41.4px) rotateY(90deg)  translateZ(102px); }
-.num3 { transform: translateX(-41.4px) rotateY(180deg) translateZ(102px); }
-.num4 { transform: translateX(-41.4px) rotateY(270deg) translateZ(102px); }
-
-/* Face posities */
-#face1 { transform: translateX(-41.4px) translateZ(100px); }
-#face2 { transform: translateX(29.2px)  translateZ(70.8px)  rotateY(45deg); }
-#face3 { transform: translateX(58.5px)  rotateY(90deg); }
-#face4 { transform: translateX(29.2px)  translateZ(-70.8px) rotateY(135deg); }
-#face5 { transform: translateX(-41.4px) translateZ(-100px)  rotateY(180deg); }
-#face6 { transform: translateX(-111.4px) translateZ(-70.8px) rotateY(225deg); }
-#face7 { transform: translateX(-141.4px) rotateY(270deg); }
-#face8 { transform: translateX(-111.4px) translateZ(70px)   rotateY(315deg); }
-
-.circle {
-  position: absolute;
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-}
-
-.clip-circle {
-  position: absolute;
-  top: -16px;
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  clip-path: circle(99px at center);
-}
-
-.lighting {
-  box-shadow:
-    -20px -30px 55px 0 rgba(0,0,0,0.7) inset,
-    -75px -100px 150px 0 rgba(0,0,0,0.4) inset,
-    75px 100px 200px 0 rgba(255,255,255,0.3) inset;
-  pointer-events: none;
 }
