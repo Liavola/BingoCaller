@@ -48,10 +48,16 @@ const UI = (() => {
   void els.currentBall.offsetWidth;
   els.currentBall.classList.add('animate');
 
+  // Remove last-called from previous cell 
+  const prevLastCalled = document.querySelector('.board-cell.last-called');
+  if (prevLastCalled) {
+    prevLastCalled.classList.remove('last-called');
+  }
+
   // Board cel markeren
   const cell = document.querySelector(`.board-cell[data-number="${ball.number}"]`);
   if (cell) {
-    cell.classList.add('called', 'just-called');
+    cell.classList.add('called', 'just-called', 'last-called');
     setTimeout(() => cell.classList.remove('just-called'), 600);
   }
 }
@@ -99,7 +105,7 @@ function resetDisplay() {
   els.previousCalls.innerHTML = '';
   els.currentBall.classList.remove('letter-B','letter-I','letter-N','letter-G','letter-O');
   document.querySelectorAll('.board-cell')
-    .forEach(c => c.classList.remove('called', 'just-called'));
+    .forEach(c => c.classList.remove('called', 'just-called', 'last-called'));
   updateStats();
 }
 
