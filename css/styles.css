@@ -346,10 +346,9 @@ body {
 
 /* Last called — brighter and pulsing */
 .board-cell.last-called {
-  background: var(--accent);
+  background: #fef08a;    /* lichter geel */
   color: #1f2937;
-  scale: 1.15;
-  transition: scale 0.2s ease;
+  box-shadow: 0 0 8px 2px rgba(251, 191, 36, 0.6);
 }
 
 @keyframes pulse-cell {
