@@ -59,23 +59,6 @@ body {
   display: block;
 }
 
-/* Gekleurde basis achter de 3D bal */
-.current-ball::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: #475569;
-  z-index: 0;
-  transition: background 0.4s ease;
-}
-
-.current-ball.letter-B::before { background: #dc2626; }
-.current-ball.letter-I::before { background: #d97706; }
-.current-ball.letter-N::before { background: #059669; }
-.current-ball.letter-G::before { background: #2563eb; }
-.current-ball.letter-O::before { background: #9333ea; }
-
 /* Face kleuren via letter klasse */
 .current-ball .face            { background: #475569; }
 .current-ball.letter-B .face  { background: #dc2626; }
