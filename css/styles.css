@@ -75,19 +75,21 @@ body {
   left: 100px;
   position: absolute;
   perspective-origin: 0 0;
-  perspective: 80px;
+  perspective: 600px;
   z-index: 1;
 }
 
 .cube-2 {
   transform: translateZ(-100px) scaleX(1.8);
   transform-style: preserve-3d;
+  backface-visibility: hidden;
 }
 
 .cube {
   top: -100px;
   position: relative;
   transform-style: preserve-3d;
+  backface-visibility: hidden;
   animation: rotate 10s linear infinite;
 }
 
@@ -101,6 +103,7 @@ body {
   width: 84px;
   height: 200px;
   transition: background 0.4s ease;
+  backface-visibility: hidden;
 }
 
 /* Face posities */
