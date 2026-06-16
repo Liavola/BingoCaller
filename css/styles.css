@@ -75,7 +75,7 @@ body {
   left: 100px;
   position: absolute;
   perspective-origin: 0 0;
-  perspective: 600px;
+  perspective: 80px;
   z-index: 1;
 }
 
