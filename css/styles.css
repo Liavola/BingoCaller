@@ -339,17 +339,6 @@ body {
   animation: rot-3d 10s linear infinite;
 }
 
-.gridplane-3d {
-  width: 198px;
-  height: 198px;
-  border-radius: 50%;
-  border: 1px dashed rgba(255, 255, 255, 0.35);
-}
-
-.xline-3d  { transform: rotateX(90deg); }
-.xline2-3d { transform: rotateX(90deg) translateY(2px); }
-.yline-3d  { transform: rotateY(90deg); }
-.zline-3d  { transform: rotateZ(90deg); }
 
 .clip-3d {
   border-radius: 50%;
