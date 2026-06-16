@@ -346,10 +346,10 @@ body {
 
 /* Last called — brighter and pulsing */
 .board-cell.last-called {
-  background: white;
+  background: var(--accent);
   color: #1f2937;
-  box-shadow: 0 0 10px 3px rgba(251, 191, 36, 0.8);
-  animation: pulse-cell 1.5s ease-in-out infinite;
+  scale: 1.15;
+  transition: scale 0.2s ease;
 }
 
 @keyframes pulse-cell {
