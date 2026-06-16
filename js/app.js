@@ -7,9 +7,16 @@ const App = (() => {
     UI.init();
     Speech.init();
     Bingo.init();
-
     bindEvents();
     UI.updateStats();
+
+  // Start muziek bij eerste klik
+  const bgMusic = document.getElementById('bgMusic');
+  bgMusic.volume = 0.2;  // zacht op de achtergrond
+
+  document.addEventListener('click', () => {
+    bgMusic.play().catch(e => console.log('Audio blocked:', e));
+  }, { once: true });  // only triggers once
   }
 
   function bindEvents() {
